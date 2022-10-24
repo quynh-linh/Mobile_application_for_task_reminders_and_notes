@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#313642"
+    tools:context=".fragments.UserFragment">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="157dp"
+                android:layout_height="138dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="100dp"
+                android:background="@drawable/custom_user_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.571"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="108dp"
+                    android:layout_height="109dp"
+                    android:src="@android:mipmap/sym_def_app_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.489"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.448" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="384dp"
+                android:layout_height="362dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_redeem"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/font"
+                    android:text="21/06/2002"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="20dp"
+                    android:drawableLeft="@drawable/ic_contact_phone"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/font"
+                    android:text="0981984623"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="40dp"
+                    android:drawableLeft="@drawable/ic_location"
+                    android:fontFamily="@font/font"
+                    android:gravity="center_vertical"
+                    android:text="Nguyễn Thanh Quỳnh Linh"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/button7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/custom_button_user"
+                    android:fontFamily="@font/font"
+                    android:text="Chỉnh sửa thông tin"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/button_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button_user"
+                    android:fontFamily="@font/font"
+                    android:text="Đăng xuất"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
