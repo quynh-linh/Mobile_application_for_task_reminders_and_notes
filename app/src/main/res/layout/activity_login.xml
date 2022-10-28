@@ -60,9 +60,11 @@
 
     <Button
         android:id="@+id/buttonSignup"
-        android:layout_width="74dp"
+        android:layout_width="wrap_content"
         android:layout_height="33dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/custombutton_regester"
         android:fontFamily="@font/font"
         android:text="Sign up"
@@ -71,13 +73,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
-        app:layout_constraintVertical_bias="0.689"
+        app:layout_constraintVertical_bias="0.894"
         tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="40dp"
         android:fontFamily="@font/font"
         android:text="Do not have an account?"

@@ -48,15 +48,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView21"></TextView>
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/editTextName"
                 android:layout_width="379dp"
                 android:layout_height="38dp"
                 android:layout_marginTop="8dp"
-                android:focusable="false"
                 android:fontFamily="@font/font"
                 android:hint="Work App Design"
                 android:textColorHint="#888484"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView20"
@@ -71,7 +71,7 @@
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText">
+                app:layout_constraintTop_toBottomOf="@+id/editTextName">
 
                 <LinearLayout
                     android:layout_width="155dp"
@@ -81,6 +81,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/imageButtonDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -100,11 +101,12 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="30dp"
                             android:fontFamily="@font/font"
-                            android:text="Date"
+                            android:text="Date Start"
                             android:textColor="#878484"
                             android:textSize="12sp"></TextView>
 
                         <TextView
+                            android:id="@+id/textViewContentDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -126,12 +128,15 @@
                     android:background="@drawable/custom_constranintlayout_categories"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <ImageButton
+                        android:id="@+id/imageButtonDateEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
-                        android:src="@drawable/icon_taskzone"></ImageView>
+                        android:background="@null"
+                        android:src="@drawable/icon_datetime"
+                        tools:ignore="SpeakableTextPresentCheck"></ImageButton>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -144,17 +149,18 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="30dp"
                             android:fontFamily="@font/font"
-                            android:text="Task Zone"
+                            android:text="Date End"
                             android:textColor="#878484"
                             android:textSize="12sp"></TextView>
 
                         <TextView
+                            android:id="@+id/textviewDateEnd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/font"
-                            android:text="GMT +6"
+                            android:text="24 Oc"
                             android:textColor="@color/white"
                             android:textSize="12sp"></TextView>
                     </LinearLayout>
@@ -180,6 +186,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/imageBtnTasStart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -204,6 +211,7 @@
                             android:textSize="12sp"></TextView>
 
                         <TextView
+                            android:id="@+id/textViewTasStart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -222,6 +230,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/imageBtnTaskEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -246,6 +255,7 @@
                             android:textSize="12sp"></TextView>
 
                         <TextView
+                            android:id="@+id/textviewTaskEnd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -272,21 +282,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2"></TextView>
 
-            <TextView
-                android:id="@+id/textView18"
-                android:padding="16dp"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edittextDes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/font"
-                android:text="Inspired by the gods of ancient Egypt, I came up with an idea to design a product with an ancient ancient style."
-                android:textColor="#878484"
-                android:textSize="16sp"
+                android:gravity="top"
+                android:hint="Descriptions"
+                android:inputType="text|textMultiLine"
+                android:padding="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="#888484"
+                android:textSize="14sp"
+                android:lines="8"
+                android:maxLines="10"
+                android:minLines="6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView19"></TextView>
+                app:layout_constraintTop_toBottomOf="@+id/textView19"></EditText>
 
             <Button
+                android:id="@+id/buttonCreateTask"
                 android:layout_width="384dp"
                 android:layout_height="56dp"
                 android:layout_margin="20dp"
@@ -294,11 +313,12 @@
                 android:background="@drawable/cutombuton_createtask"
                 android:fontFamily="@font/font"
                 android:text="Create Task"
+                android:hint="Descriptions"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView18"></Button>
+                app:layout_constraintTop_toBottomOf="@+id/edittextDes"></Button>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
