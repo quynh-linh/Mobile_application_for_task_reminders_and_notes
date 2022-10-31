@@ -46,6 +46,9 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_calendar"
         app:layout_constraintEnd_toEndOf="parent"
+        android:dateTextAppearance ="@style/CalenderViewDateCustomText"
+        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+        android:theme="@style/CalenderViewCustom"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_create" />

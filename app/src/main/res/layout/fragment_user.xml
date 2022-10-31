@@ -17,18 +17,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"
-                android:layout_width="157dp"
-                android:layout_height="138dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
-                android:layout_marginTop="48dp"
                 android:layout_marginEnd="100dp"
                 android:background="@drawable/custom_user_background"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,8 +37,8 @@
 
                 <ImageView
                     android:id="@+id/imageView8"
-                    android:layout_width="108dp"
-                    android:layout_height="109dp"
+                    android:layout_width="80dp"
+                    android:layout_height="85dp"
                     android:src="@android:mipmap/sym_def_app_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +60,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/textViewNgaySinh"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginBottom="20dp"
@@ -69,11 +68,11 @@
                     android:drawableLeft="@drawable/ic_redeem"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/font"
-                    android:text="21/06/2002"
+                    android:text="null"
                     android:textColor="@color/white" />
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/textViewPhone"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginBottom="20dp"
@@ -81,22 +80,22 @@
                     android:gravity="center_vertical"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/font"
-                    android:text="0981984623"
+                    android:text="null"
                     android:textColor="@color/white" />
 
                 <TextView
-                    android:id="@+id/textView17"
+                    android:id="@+id/textViewName"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginBottom="40dp"
-                    android:drawableLeft="@drawable/ic_location"
+                    android:drawableLeft="@drawable/ic_user"
                     android:fontFamily="@font/font"
                     android:gravity="center_vertical"
-                    android:text="Nguyễn Thanh Quỳnh Linh"
+                    android:text="null"
                     android:textColor="@color/white" />
 
                 <Button
-                    android:id="@+id/button7"
+                    android:id="@+id/btnUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
