@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.doan.IpAddressWifi;
 import com.example.doan.R;
 import com.example.doan.Session;
 
@@ -31,8 +34,10 @@ import java.util.Map;
 public class UpdateUserFragment extends Fragment {
     EditText editTextName,editTextPhone,editTextBirthDay;
     Button buttonUpdate;
+    ImageButton imageButtonBack;
     TextView textViewNotify;
-    String url = "http://192.168.1.39:8080/Mobile_App/updateUser.php";
+    IpAddressWifi ipAddressWifi ;
+    String url;
     Session session;
     String nameLogin ;
     public  void AnhXa(View view){
@@ -41,7 +46,11 @@ public class UpdateUserFragment extends Fragment {
         editTextBirthDay = (EditText) view.findViewById(R.id.editTextBirthDay);
         buttonUpdate = (Button) view.findViewById(R.id.buttonUpdate);
         textViewNotify = (TextView) view.findViewById(R.id.textViewNotify);
+        imageButtonBack = (ImageButton) view.findViewById(R.id.imageButtonBack);
         session = new Session(getActivity());
+        ipAddressWifi = new IpAddressWifi();
+        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/updateUser.php";
+        Log.d("url",url);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +63,6 @@ public class UpdateUserFragment extends Fragment {
         editTextPhone.setText(bundle.getString("phone"));
         Map<String,String > mapSession = session.getUserDetails();
         nameLogin = mapSession.get("user_name").toString().trim();
-        Toast.makeText(getActivity(), nameLogin.toString(), Toast.LENGTH_SHORT).show();
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +75,16 @@ public class UpdateUserFragment extends Fragment {
                 } else {
                     updateUser(url);
                 }
+            }
+        });
+        imageButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserFragment userFragment = new UserFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.constraint,userFragment);
+                transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                transaction.commit();
             }
         });
         return view ;

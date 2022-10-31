@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.doan.IpAddressWifi;
 import com.example.doan.LoginActivity;
 import com.example.doan.R;
 import com.example.doan.Session;
@@ -41,7 +42,8 @@ public class UserFragment extends Fragment {
     Button btnLogout ,btnUpdate;
     Session session;
     String nameLogin;
-    String url = "http://192.168.1.39:8080/Mobile_App/selectUser.php";
+    IpAddressWifi ipAddressWifi ;
+    String url;
     public void AnhXa (View view){
         textViewName =(TextView) view.findViewById(R.id.textViewName);
         textViewBirthDay =(TextView) view.findViewById(R.id.textViewNgaySinh);
@@ -49,6 +51,9 @@ public class UserFragment extends Fragment {
         btnLogout = (Button) view.findViewById(R.id.button_logout);
         btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         session = new Session(getActivity());
+        ipAddressWifi = new IpAddressWifi();
+        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/selectUser.php";
+        Log.d("url",url);
     }
     @Override
     @SuppressLint("ResourceType")

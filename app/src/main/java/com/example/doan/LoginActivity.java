@@ -36,14 +36,26 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextNameLogin , editTextPass;
     TextView textViewNotify;
     Session session;
-    String url = "http://192.168.1.39:8080//Mobile_App/loginUser.php";
+    IpAddressWifi ipAddressWifi ;
+    String url;
+    public void AnhXa(){
+        btnlogin = (Button) findViewById(R.id.buttonLogin);
+        btnsignup = (Button) findViewById(R.id.buttonSignup);
+        editTextNameLogin = (EditText) findViewById(R.id.editTextNameLogin);
+        editTextPass = (EditText) findViewById(R.id.editTextPass);
+        textViewNotify = (TextView) findViewById(R.id.textViewNotify);
+        session = new Session(LoginActivity.this);
+        ipAddressWifi = new IpAddressWifi();
+        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/loginUser.php";
+        Log.d("url",url);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
         AnhXa();
-        session = new Session(LoginActivity.this);
+
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,13 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public void AnhXa(){
-        btnlogin = (Button) findViewById(R.id.buttonLogin);
-        btnsignup = (Button) findViewById(R.id.buttonSignup);
-        editTextNameLogin = (EditText) findViewById(R.id.editTextNameLogin);
-        editTextPass = (EditText) findViewById(R.id.editTextPass);
-        textViewNotify = (TextView) findViewById(R.id.textViewNotify);
-    }
+
     public void loginUser(String url){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
