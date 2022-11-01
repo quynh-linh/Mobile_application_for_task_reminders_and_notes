@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -41,20 +42,22 @@ public class TaskApdater extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(layout,null);
         //
-        TextView textviewTimeStart = (TextView) view.findViewById(R.id.timeStarts);
-        TextView textviewTimeEnd = (TextView) view.findViewById(R.id.timeEnd);
+        TextView time = (TextView) view.findViewById(R.id.textViewTime);
         TextView name = (TextView) view.findViewById(R.id.textviewName);
         TextView description = (TextView) view.findViewById(R.id.textviewDess);
-        TextView dateStarts = (TextView) view.findViewById(R.id.dateStarts);
-        TextView endStarts = (TextView) view.findViewById(R.id.dateEnd);
+        TextView date = (TextView) view.findViewById(R.id.textViewDate);
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBoxStatus);
         // gán giá trị
         Task task = taskList.get(i);
-        textviewTimeStart.setText(task.getTimeStart());
+        time.setText(task.getTime());
         name.setText(task.getName());
         description.setText(task.getDescription());
-        textviewTimeEnd.setText(task.getTimeEnd());
-        dateStarts.setText(task.getStartTask());
-        endStarts.setText(task.getEndTask());
+        date.setText(task.getDate());
+        if (task.getCheck_status().equals("1")){
+            checkBox.setChecked(true);
+        }else{
+            checkBox.setChecked(false);
+        }
         return view;
     }
 }

@@ -77,14 +77,6 @@ public class CreateTaskFragment extends Fragment {
             public void onClick(View view) {
                 ListFragment fragment = new ListFragment();
                 FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-                Bundle bundle = new Bundle();
-                bundle.putString("name",editTextName.getText().toString());
-                bundle.putString("description",editTextDes.getText().toString());
-                bundle.putString("dateStart",textViewDate.getText().toString());
-                bundle.putString("dateEnd",textViewDateEnd.getText().toString());
-                bundle.putString("timeStart",textViewTaskStart.getText().toString());
-                bundle.putString("timeEnd",textViewTaskEnd.getText().toString());
-                fragment.setArguments(bundle);
                 fm.replace(R.id.constraint,fragment,"fragment");
                 fm.commit();
             }

@@ -5,27 +5,31 @@ import java.util.Date;
 public class Task {
     private String name;
     private String description;
-    private String startTask;
-    private String endTask;
-    private String timeStart;
-    private String timeEnd;
+    private String date;
+    private String check_status;
+    private String time;
+    private String user_id ;
     public Task(){
 
     }
-    public Task(String name, String description, String startTask, String endTask, String timeStart, String timeEnd) {
+
+    public Task(String name, String description, String date, String check_status, String time, String user_id) {
         this.name = name;
         this.description = description;
-        this.startTask = startTask;
-        this.endTask = endTask;
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
+        this.date = date;
+        this.check_status = check_status;
+        this.time = time;
+        this.user_id = user_id;
     }
 
-    public Task(String name, String description, String timeStart) {
+    public Task(String name, String description, String date, String check_status, String time) {
         this.name = name;
         this.description = description;
-        this.timeStart = timeStart;
+        this.date = date;
+        this.check_status = check_status;
+        this.time = time;
     }
+
     public String getName() {
         return name;
     }
@@ -42,35 +46,35 @@ public class Task {
         this.description = description;
     }
 
-    public String getStartTask() {
-        return startTask;
+    public String getDate() {
+        return date;
     }
 
-    public void setStartTask(String startTask) {
-        this.startTask = startTask;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getEndTask() {
-        return endTask;
+    public String getCheck_status() {
+        return check_status;
     }
 
-    public void setEndTask(String endTask) {
-        this.endTask = endTask;
+    public void setCheck_status(String check_status) {
+        this.check_status = check_status;
     }
 
-    public String getTimeStart() {
-        return timeStart;
+    public String getTime() {
+        return time;
     }
 
-    public void setTimeStart(String timeStart) {
-        this.timeStart = timeStart;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getTimeEnd() {
-        return timeEnd;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setTimeEnd(String timeEnd) {
-        this.timeEnd = timeEnd;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }
