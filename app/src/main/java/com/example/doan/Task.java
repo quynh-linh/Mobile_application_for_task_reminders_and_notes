@@ -3,6 +3,7 @@ package com.example.doan;
 import java.util.Date;
 
 public class Task {
+    private  String id;
     private String name;
     private String description;
     private String date;
@@ -13,21 +14,13 @@ public class Task {
 
     }
 
-    public Task(String name, String description, String date, String check_status, String time, String user_id) {
+    public Task(String id, String name, String description, String date,String time, String user_id) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.check_status = check_status;
         this.time = time;
         this.user_id = user_id;
-    }
-
-    public Task(String name, String description, String date, String check_status, String time) {
-        this.name = name;
-        this.description = description;
-        this.date = date;
-        this.check_status = check_status;
-        this.time = time;
     }
 
     public String getName() {
@@ -54,13 +47,6 @@ public class Task {
         this.date = date;
     }
 
-    public String getCheck_status() {
-        return check_status;
-    }
-
-    public void setCheck_status(String check_status) {
-        this.check_status = check_status;
-    }
 
     public String getTime() {
         return time;
@@ -70,11 +56,12 @@ public class Task {
         this.time = time;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getId() {
+        return id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setId(String id) {
+        this.id = id;
     }
+
 }

@@ -1,11 +1,7 @@
 package com.example.doan.fragments;
 
-import static java.lang.String.valueOf;
-
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,7 +20,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -49,78 +43,87 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.SimpleFormatter;
 
-public class CreateTaskFragment extends Fragment {
+public class UpdateAndRemoveTaskFragment extends Fragment {
     public ImageButton imageButtonDate, imageButtonTime;
-    public Button btnCreateTask;
+    public Button btnUpdateTask , btnRemoveTask;
     public TextView textViewDate , textviewTime;
     public EditText editTextName ,editTextDes;
     String timeTonotify;
     IpAddressWifi ipAddressWifi ;
-    String url;
+    String url , urlDele;
     Session session;
-    String nameLogin ;
-    long time = new Date().getTime();
-    String tmpStr = String.valueOf(time);
-    String last4Str = tmpStr.substring(tmpStr.length()-5);
-    int id = Integer.valueOf(last4Str);
-    public CreateTaskFragment() {
+    int id;
+    public UpdateAndRemoveTaskFragment() {
         // Required empty public constructor
     }
-    private  void AnhXa(View view){
-        // Image Button
+    public void AnhXa(View view){
         imageButtonDate = (ImageButton) view.findViewById(R.id.imageButtonDate);
         imageButtonTime = (ImageButton) view.findViewById(R.id.imageButtonTime);
-        //Button
-        btnCreateTask = (Button) view.findViewById(R.id.buttonCreateTask);
-        // Text View
-        textViewDate = (TextView) view.findViewById(R.id.textViewContentDate);
-        textviewTime = (TextView) view.findViewById(R.id.textviewTime);
-        //Edit Text
-        editTextName = (EditText) view.findViewById(R.id.editTextName);
+        btnUpdateTask = (Button) view.findViewById(R.id.buttonUpdateTask);
+        btnRemoveTask = (Button) view.findViewById(R.id.buttonRemoveTask);
         editTextDes = (EditText) view.findViewById(R.id.edittextDes);
-        //
+        editTextName = (EditText) view.findViewById(R.id.editTextName);
+        textviewTime = (TextView) view.findViewById(R.id.textviewTime);
+        textViewDate = (TextView) view.findViewById(R.id.textViewContentDate);
         session = new Session(getActivity());
         ipAddressWifi = new IpAddressWifi();
-        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/insertTask.php";
+        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/updateTask.php";
+        urlDele = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/deleteTask.php";
         Log.d("url",url);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View  view=  inflater.inflate(R.layout.fragment_create_task, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_and_remove_task, container, false);
         AnhXa(view);
-        Map<String,String> mapSess = session.getUserDetails();
-        nameLogin = mapSess.get("user_name").toString().trim();
-        imageButtonDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectDate();
-            }
-        });
+        Bundle bundle = getArguments();
+        String title =  bundle.getString("title");
+        String time = bundle.getString("time");
+        String date = bundle.getString("date");
+        String content = bundle.getString("content");
+        String user_id = bundle.getString("nameLogin");
+        id = Integer.valueOf(bundle.getString("id"));
+        editTextName.setText(title);
+        editTextDes.setText(content);
+        textviewTime.setText(time);
+        textViewDate.setText(date);
         imageButtonTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectTime();
             }
         });
-        btnCreateTask.setOnClickListener(new View.OnClickListener() {
+        imageButtonDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = editTextName.getText().toString().trim();
-                String date = textViewDate.getText().toString().trim();
-                String time =textviewTime.getText().toString().trim();
-                processinsert(title,date,time);
-                ListFragment fragment = new ListFragment();
+                selectDate();
+            }
+        });
+        btnUpdateTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = editTextName.getText().toString().trim();
+                String date1 = textViewDate.getText().toString().trim();
+                String time1 = textviewTime.getText().toString().trim();
+                String content1 = editTextDes.getText().toString().trim();
+                UpdateTask(id,name,date1,time1,content1,user_id,url);
+                processinsert(name,date1,time1);
+            }
+        });
+        btnRemoveTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeTask(urlDele,id);
+                ListFragment list = new ListFragment();
                 FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-                fm.replace(R.id.constraint,fragment,"fragment");
+                fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                fm.replace(R.id.constraint,list);
                 fm.commit();
             }
         });
         return view;
     }
-
     public void selectTime() {
         //this method performs the time picker task
         Calendar calendar = Calendar.getInstance();
@@ -174,45 +177,10 @@ public class CreateTaskFragment extends Fragment {
         }, year, month, day);
         datePickerDialog.show();
     }
-    private void insertTask(String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.trim().equals("success")){
-                    Log.d("Success",response.toString());
-                } else {
-                    Log.d("Error success",response.toString());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error Insert",error.toString().trim());
-            }
-        }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                map.put("id",String.valueOf(id).trim());
-                map.put("title",editTextName.getText().toString().trim());
-                map.put("content",editTextDes.getText().toString().trim());
-                map.put("time",textviewTime.getText().toString().trim());
-                map.put("date",textViewDate.getText().toString().trim());
-                map.put("user_id",nameLogin);
-                return map;
-            }
-        };
-        requestQueue.add(stringRequest);
-    }
     private void processinsert(String title, String date, String time) {
-        //inserts the title,date,time into sql lite database
         setAlarm(title, date, time);
-        //add mysql
-        insertTask(url);
         //calls the set alarm method to set alarm
-        Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Sửa thành công", Toast.LENGTH_SHORT).show();
     }
 
     private void setAlarm(String text, String date, String time) {
@@ -240,5 +208,69 @@ public class CreateTaskFragment extends Fragment {
         transaction.replace(R.id.constraint,lfm);
         transaction.commit();
         //điều hướng từ việc thêm hoạt động nhắc nhở thành hoạt động
+    }
+
+    private void UpdateTask(int id , String title , String date , String time , String content , String user_id , String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.trim().equals("success")){
+                    //Toast.makeText(getActivity(), "Sửa thành công", Toast.LENGTH_SHORT).show();
+                    Log.d("Success",response.toString());
+                } else {
+                    //Toast.makeText(getActivity(), "Sửa thất bại", Toast.LENGTH_SHORT).show();
+                    Log.d("Error success",response.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error Insert",error.toString().trim());
+            }
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("id",String.valueOf(id).trim());
+                map.put("title",title.trim());
+                map.put("content",content.trim());
+                map.put("time",time.trim());
+                map.put("date",date.trim());
+                map.put("user_id",user_id.trim());
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+    private void removeTask(String url,int id){
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.trim().equals("Delete Success")){
+                    //Toast.makeText(getActivity(), "Sửa thành công", Toast.LENGTH_SHORT).show();
+                    Log.d("Delete Success",response.toString());
+                } else {
+                    //Toast.makeText(getActivity(), "Sửa thất bại", Toast.LENGTH_SHORT).show();
+                    Log.d("Error delete",response.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error delete",error.toString().trim());
+            }
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("id",String.valueOf(id).trim());
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 }

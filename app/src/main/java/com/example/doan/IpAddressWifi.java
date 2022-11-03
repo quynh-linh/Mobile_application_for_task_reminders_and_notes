@@ -6,7 +6,7 @@ public class IpAddressWifi {
     public String portLocalHost;
 
     public IpAddressWifi() {
-        this.ip = "172.20.10.2";
+        this.ip = "192.168.1.39";
         this.fileNameDB = "Mobile_App";
         this.portLocalHost = ":8080";
     }

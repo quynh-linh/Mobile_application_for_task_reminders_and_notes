@@ -1,27 +1,28 @@
 package com.example.doan.fragments;
 
-import static android.graphics.Color.rgb;
-
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.doan.IpAddressWifi;
 import com.example.doan.R;
@@ -33,10 +34,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ListFragment extends Fragment {
@@ -52,10 +52,10 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View  view=  inflater.inflate(R.layout.fragment_list, container, false);
         AnhXa(view);
-        //Task task = new Task(name,description,dateStart,dateEnd,timeStart,timeEnd);
-        //arrayListTasks.add(task);
-        taskApdater = new TaskApdater(getActivity(),R.layout.row_listview_task,arrayListTasks);
-        listView.setAdapter(taskApdater);
+
+        Map<String,String> mapSes = session.getUserDetails();
+        String nameLogin = mapSes.get("user_name").trim();
+        ReadJsonTask(url,nameLogin);
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,7 +66,26 @@ public class ListFragment extends Fragment {
                 fm.commit();
             }
         });
-        ReadJsonTask(url);
+        if (listView != null){
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title",arrayListTasks.get(i).getName().toString().trim());
+                    bundle.putString("time",arrayListTasks.get(i).getTime().toString().trim());
+                    bundle.putString("date",arrayListTasks.get(i).getDate().toString().trim());
+                    bundle.putString("content",arrayListTasks.get(i).getDescription().toString().trim());
+                    bundle.putString("nameLogin",nameLogin);
+                    bundle.putString("id",arrayListTasks.get(i).getId().toString().trim());
+                    FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                    UpdateAndRemoveTaskFragment updateAndRemoveTaskFragment = new UpdateAndRemoveTaskFragment();
+                    updateAndRemoveTaskFragment.setArguments(bundle);
+                    fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                    fm.replace(R.id.constraint,updateAndRemoveTaskFragment,"fragment");
+                    fm.commit();
+                }
+            });
+        }
         return view;
     }
     private void AnhXa(View view){
@@ -78,36 +97,44 @@ public class ListFragment extends Fragment {
         url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/selectJsonTask.php";
         Log.d("url",url);
     }
-    private void ReadJsonTask(String url){
+    private void ReadJsonTask(String url, String nameLogin){
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
+        StringRequest arrayRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONArray response) {
-                for (int i=0 ; i<response.length() ; i++){
-                    try {
-                        JSONObject jsonObject = (JSONObject) response.get(i);
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for(int i=0 ; i< jsonArray.length() ; i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String name = jsonObject.getString("name");
                         String des = jsonObject.getString("content");
                         String date = jsonObject.getString("date");
                         String time = jsonObject.getString("time");
-                        String status = jsonObject.getString("check_status");
-                        arrayListTasks.add(new Task(name,des,date,status,time));
+                        String user_id = jsonObject.getString("user_id");
+                        String id = jsonObject.getString("id");
+                        arrayListTasks.add(new Task(id,name,des,date,time,user_id));
                         taskApdater = new TaskApdater(getActivity(),R.layout.row_listview_task,arrayListTasks);
                         listView.setAdapter(taskApdater);
-                        Log.d("Success list",response.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d("Error list",e.toString());
                     }
+                    Log.d("Success list",response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-                Log.d("Error get json list",error.toString());
+                Log.d("Error Success list",error.toString());
             }
-        });
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("nameLogin",nameLogin);
+                return map;
+            }
+        };
         requestQueue.add(arrayRequest);
     }
 }

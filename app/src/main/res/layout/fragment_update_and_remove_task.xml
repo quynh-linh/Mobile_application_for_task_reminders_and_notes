@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#313642"
-    android:orientation="vertical"
-    tools:context=".fragments.CreateTaskFragment">
+    android:background="@color/color_main"
+    tools:context=".fragments.UpdateAndRemoveTaskFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/textView21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/font"
-                android:text="Create New Task"
+                android:text="Update and Remove Task"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,9 +55,9 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/font"
                 android:hint="Work App Design"
+                android:textColor="@color/white"
                 android:textColorHint="#888484"
                 android:textSize="14sp"
-                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView20"
@@ -66,8 +68,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal"
                 android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextName">
@@ -168,11 +170,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
                 android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3"/>
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
             <TextView
                 android:id="@+id/textView19"
@@ -199,33 +201,61 @@
                 android:gravity="top"
                 android:hint="Descriptions"
                 android:inputType="text|textMultiLine"
+                android:lines="8"
+                android:maxLines="10"
+                android:minLines="6"
                 android:padding="16dp"
                 android:textColor="@color/white"
                 android:textColorHint="#888484"
                 android:textSize="14sp"
-                android:lines="8"
-                android:maxLines="10"
-                android:minLines="6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView19"></EditText>
 
-            <Button
-                android:id="@+id/buttonCreateTask"
-                android:layout_width="384dp"
-                android:layout_height="56dp"
-                android:layout_margin="20dp"
-                android:layout_marginTop="60dp"
-                android:background="@drawable/cutombuton_createtask"
-                android:fontFamily="@font/font"
-                android:hint="Descriptions"
-                android:text="Create Task"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.592"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edittextDes"></Button>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/edittextDes"
+                tools:layout_editor_absoluteX="0dp">
+
+                <Button
+                    android:id="@+id/buttonUpdateTask"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@drawable/cutombuton_createtask"
+                    android:fontFamily="@font/font"
+                    android:hint="Descriptions"
+                    android:padding="10dp"
+                    android:text="Update"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.592"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edittextDes"></Button>
+
+                <Button
+                    android:id="@+id/buttonRemoveTask"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@drawable/cutombuton_createtask"
+                    android:fontFamily="@font/font"
+                    android:padding="10dp"
+                    android:text="Remove"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.592"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edittextDes"></Button>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

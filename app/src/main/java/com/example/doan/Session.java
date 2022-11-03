@@ -17,12 +17,11 @@ public class Session {
     // Shared pref mode
     int PRIVATE_MODE = 0;
     // Sharedpref file name
-    private static final String PREF_NAME = "AndroidHivePref";
+    private static final String PREF_NAME = "Mobile-app";
     // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
     // User name (make variable public to access from outside)
     public static final String KEY_NAME = "user_name";
-
     // Constructor
     @SuppressLint("CommitPrefEdits")
     public Session(Context context) {
