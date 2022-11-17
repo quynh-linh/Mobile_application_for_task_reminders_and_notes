@@ -1,21 +1,14 @@
-package com.example.doan;
+package com.example.doan.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.example.doan.fragments.UpdateAndRemoveTaskFragment;
-
-import org.w3c.dom.Text;
+import com.example.doan.Model.Task;
+import com.example.doan.R;
 
 import java.util.List;
 
@@ -23,7 +16,6 @@ public class TaskApdater extends BaseAdapter {
     private Context context;
     private int layout;
     private List<Task> taskList;
-    public View row;
 
     public TaskApdater(Context context, int layout, List<Task> taskList) {
         this.context = context;

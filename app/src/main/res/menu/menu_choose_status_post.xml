@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="Vui"
+        android:id="@+id/fun"
+        android:icon="@drawable/icons8_happy_48">
+    </item>
+    <item
+        android:title="Buồn"
+        android:id="@+id/sad"
+        android:icon="@drawable/icons8_frowning_face">
+    </item>
+    <item
+        android:title="Tức giận"
+        android:id="@+id/angry"
+        android:icon="@drawable/icons8_frowning_face">
+    </item>
+    <item
+        android:title="Hạnh phúc"
+        android:id="@+id/happy"
+        android:icon="@drawable/icons8_frowning_face">
+    </item>
+</menu>

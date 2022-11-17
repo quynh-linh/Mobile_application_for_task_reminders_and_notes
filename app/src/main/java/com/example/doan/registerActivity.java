@@ -28,7 +28,8 @@ public class registerActivity extends AppCompatActivity {
     EditText editTextNameLogin , editTextPass , editTextEnterPass;
     Button btnRegister;
     TextView textviewNotify;
-    String url = "http://192.168.1.39:8080/Mobile_App/insertUser.php";
+    IpAddressWifi ipAddressWifi ;
+    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,9 @@ public class registerActivity extends AppCompatActivity {
         editTextEnterPass = (EditText) findViewById(R.id.editTextTextEnterPassword);
         textviewNotify = (TextView) findViewById(R.id.textviewNotify);
         btnRegister = (Button) findViewById(R.id.buttonRegister);
+        ipAddressWifi = new IpAddressWifi();
+        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/insertUser.php";
+        Log.d("url",url);
     }
     public  void addUser(String url){
         RequestQueue requestQueue = Volley.newRequestQueue(this);

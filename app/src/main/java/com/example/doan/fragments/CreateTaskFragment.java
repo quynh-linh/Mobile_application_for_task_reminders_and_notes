@@ -1,11 +1,9 @@
 package com.example.doan.fragments;
 
-import static java.lang.String.valueOf;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,7 +22,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -41,6 +37,7 @@ import com.example.doan.IpAddressWifi;
 import com.example.doan.MyNotificationPublisher;
 import com.example.doan.R;
 import com.example.doan.Session;
+import com.example.doan.Adapter.TaskApdater;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,7 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.SimpleFormatter;
+
 
 public class CreateTaskFragment extends Fragment {
     public ImageButton imageButtonDate, imageButtonTime;
@@ -114,12 +111,15 @@ public class CreateTaskFragment extends Fragment {
                 processinsert(title,date,time);
                 ListFragment fragment = new ListFragment();
                 FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                TaskApdater taskApdater = ListFragment.taskApdater;
+                taskApdater.notifyDataSetChanged();
                 fm.replace(R.id.constraint,fragment,"fragment");
                 fm.commit();
             }
         });
         return view;
     }
+
 
     public void selectTime() {
         //this method performs the time picker task
@@ -237,6 +237,8 @@ public class CreateTaskFragment extends Fragment {
         }
         ListFragment lfm = new ListFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        TaskApdater taskApdater = ListFragment.taskApdater;
+        taskApdater.notifyDataSetChanged();
         transaction.replace(R.id.constraint,lfm);
         transaction.commit();
         //điều hướng từ việc thêm hoạt động nhắc nhở thành hoạt động

@@ -10,9 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.doan.Model.NotificationMessage;
 
 public class MyNotificationPublisher extends BroadcastReceiver {
     @Override
@@ -56,6 +59,7 @@ public class MyNotificationPublisher extends BroadcastReceiver {
             mBuilder.setChannelId(channelId);
         }
         Notification notification = mBuilder.build();
+        Log.d("notify", "" +id + notification);
         notificationManager.notify(id, notification);
     }
 }

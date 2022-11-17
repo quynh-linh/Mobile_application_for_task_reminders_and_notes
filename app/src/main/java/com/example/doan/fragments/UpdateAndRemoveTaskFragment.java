@@ -35,6 +35,7 @@ import com.example.doan.IpAddressWifi;
 import com.example.doan.MyNotificationPublisher;
 import com.example.doan.R;
 import com.example.doan.Session;
+import com.example.doan.Adapter.TaskApdater;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -118,6 +119,8 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
                 ListFragment list = new ListFragment();
                 FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
                 fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                TaskApdater taskApdater = ListFragment.taskApdater;
+                taskApdater.notifyDataSetChanged();
                 fm.replace(R.id.constraint,list);
                 fm.commit();
             }
@@ -198,6 +201,7 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(dateandtime);
+            Log.d("Date",date1.toString());
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
             Toast.makeText(getActivity(), "Alarm", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
@@ -206,6 +210,8 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
         ListFragment lfm = new ListFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.constraint,lfm);
+        TaskApdater taskApdater = ListFragment.taskApdater;
+        taskApdater.notifyDataSetChanged();
         transaction.commit();
         //điều hướng từ việc thêm hoạt động nhắc nhở thành hoạt động
     }

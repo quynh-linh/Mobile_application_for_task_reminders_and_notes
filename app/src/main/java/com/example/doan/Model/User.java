@@ -1,4 +1,4 @@
-package com.example.doan;
+package com.example.doan.Model;
 
 public class User {
     private int id;
