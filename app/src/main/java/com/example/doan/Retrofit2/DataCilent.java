@@ -24,14 +24,15 @@ public interface DataCilent {
                                 @Field("image") String image,
                                 @Field("user_id") String user_id,
                                 @Field("find_id") String find_id);
-//    @FormUrlEncoded
-//    @POST("updateNote.php")
-//    Call<String> updateDataNote(@Field("id") int id,
-//                                @Field("title") String title,
-//                                @Field("content") String content,
-//                                @Field("date") String date,
-//                                @Field("time") String time,
-//                                @Field("upload") String upload);
+    @FormUrlEncoded
+    @POST("updateDinaryPost.php")
+    Call<String> updateDataNote(@Field("id") String id,
+                                @Field("title") String title,
+                                @Field("content") String content,
+                                @Field("date") String date,
+                                @Field("image") String image,
+                                @Field("user_id") String user_id,
+                                @Field("find_id") String find_id);
     @FormUrlEncoded
     @POST("deletePost.php")
     Call<String> removeDataPost(@Field("id") int id);

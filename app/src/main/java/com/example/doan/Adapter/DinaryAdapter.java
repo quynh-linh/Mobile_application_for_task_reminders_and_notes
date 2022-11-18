@@ -1,6 +1,7 @@
 package com.example.doan.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,6 +15,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +25,7 @@ import com.example.doan.R;
 import com.example.doan.Retrofit2.APIUtils;
 import com.example.doan.Retrofit2.DataCilent;
 import com.example.doan.fragments.LibFragment;
+import com.example.doan.fragments.UpdatePostFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,11 +39,12 @@ public class DinaryAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<DinaryModel> arrModels;
     private int layout;
-
+    private FragmentActivity fragmentActivity;
     public DinaryAdapter(Context context, ArrayList<DinaryModel> models, int layout) {
         this.context = context;
         this.arrModels = models;
         this.layout = layout;
+        this.fragmentActivity = (FragmentActivity) context;
     }
     @Override
     public int getCount() {
@@ -122,11 +127,19 @@ public class DinaryAdapter extends BaseAdapter {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.edit:
-                        //startActivity(new Intent(context, Bai1Android5Activity.class));
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("id",id);
+                        UpdatePostFragment frag = new UpdatePostFragment();
+                        frag.setArguments(bundle);
+                        FragmentTransaction transaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.constraint, frag);
+                        transaction.commit();
                         break;
                     case R.id.remove:
                         RemovePost(id);
                         break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
                 }
                 return false;
             }

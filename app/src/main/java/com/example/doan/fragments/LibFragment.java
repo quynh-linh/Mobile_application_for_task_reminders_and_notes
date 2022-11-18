@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -73,6 +74,12 @@ public class LibFragment extends Fragment {
         HashMap<String,String> map = session.getUserDetails();
         nameLogin = map.get("user_name").trim();
         ReadJsonPost(url,nameLogin);
+        listViewPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), arrayListDinary.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
         return view ;
     }
     private void ReadJsonPost(String url, String nameLogin){
