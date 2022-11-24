@@ -61,6 +61,7 @@ public class TaskApdater extends BaseAdapter {
         holder.description.setText(task.getDescription());
         holder.date.setText(task.getDate() + " " +  task.getTime());
         holder.id.setText(task.getId());
+        holder.id.setVisibility(View.INVISIBLE);
         return view;
     }
 }

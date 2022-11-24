@@ -33,9 +33,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +175,8 @@ public class ListFragment extends Fragment {
             public void onResponse(String response) {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
+                    List<EventDay> events = new ArrayList<>();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                     for(int i=0 ; i < jsonArray.length() ; i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String name = jsonObject.getString("name");
@@ -183,11 +187,18 @@ public class ListFragment extends Fragment {
                         String id = jsonObject.getString("id");
                         arrayListTasks.add(new Task(id,name,des,date,time,user_id));
                         taskApdater = new TaskApdater(getActivity(),R.layout.row_listview_task,arrayListTasks);
+                        Date da = sdf.parse(date);
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(da);
+                        events.add(new EventDay(cal, R.drawable.ic_stars));
+                        calendarView.setEvents(events);
                         listView.setAdapter(taskApdater);
                     }
                     taskApdater.notifyDataSetChanged();
                     Log.d("Success list",response.toString());
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }

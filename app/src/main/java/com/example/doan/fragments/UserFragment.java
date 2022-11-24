@@ -33,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.doan.IpAddressWifi;
 import com.example.doan.R;
 import com.example.doan.Retrofit2.APIUtils;
@@ -124,6 +125,7 @@ public class UserFragment extends Fragment {
                     textViewName.setText(jsonObject.getString("name"));
                     textViewBirthDay.setText(jsonObject.getString("ngaySinh"));
                     textViewPhone.setText(jsonObject.getString("phone"));
+                    Glide.with(imageViewUser.getContext()).load(APIUtils.baseUrl+"image/"+jsonObject.getString("image")).into(imageViewUser);
                 } catch (JSONException e) {
                     Log.v("JSonErr", e.getMessage());
             }

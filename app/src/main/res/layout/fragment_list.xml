@@ -39,10 +39,11 @@
 
     <com.applandeo.materialcalendarview.CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="413dp"
-        android:layout_height="147dp"
+        android:layout_width="match_parent"
+        android:layout_height="212dp"
         android:layout_marginTop="4dp"
         app:headerColor="#F298AE"
+        app:anotherMonthsDaysLabelsColor="#3e4553"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,19 +52,17 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ListView
                 android:id="@+id/listViewTask"
                 android:layout_width="match_parent"
-                android:layout_height="405dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="369dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/calendarView" />
