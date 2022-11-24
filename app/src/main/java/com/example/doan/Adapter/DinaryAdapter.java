@@ -1,6 +1,7 @@
 package com.example.doan.Adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,6 +138,12 @@ public class DinaryAdapter extends BaseAdapter {
                         break;
                     case R.id.remove:
                         RemovePost(id);
+                        LibFragment libFragment = new LibFragment();
+                        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            ft.setReorderingAllowed(false);
+                        }
+                        ft.detach(libFragment).attach(libFragment).commit();
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
@@ -155,9 +162,6 @@ public class DinaryAdapter extends BaseAdapter {
                 String result = response.body();
                 if (result.trim().equals("success")){
                     Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                    LibFragment libFragment = new LibFragment();
-                    DinaryAdapter dinaryAdapter = libFragment.dinaryAdapter;
-                    dinaryAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show();
                 }

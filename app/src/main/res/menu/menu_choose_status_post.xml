@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:title="Vui"
         android:id="@+id/fun"
-        android:icon="@drawable/icons8_happy_48">
+        android:icon="@drawable/icons_grinning_face">
     </item>
     <item
         android:title="Buồn"
@@ -14,11 +13,11 @@
     <item
         android:title="Tức giận"
         android:id="@+id/angry"
-        android:icon="@drawable/icons8_frowning_face">
+        android:icon="@drawable/icons_angry_face">
     </item>
     <item
         android:title="Hạnh phúc"
         android:id="@+id/happy"
-        android:icon="@drawable/icons8_frowning_face">
+        android:icon="@drawable/icons8_happy_48">
     </item>
 </menu>

@@ -2,6 +2,7 @@ package com.example.doan.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,12 +11,15 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +140,6 @@ public class CreatePostFragment extends Fragment {
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     String result = response.body();
                                     if (result.trim().equals("success")){
-                                        Toast.makeText(getActivity(), "Đăng thành công", Toast.LENGTH_SHORT).show();
                                         LibFragment libFragment = new LibFragment();
                                         DinaryAdapter dinaryAdapter = libFragment.dinaryAdapter;
                                         dinaryAdapter.notifyDataSetChanged();
@@ -144,6 +147,7 @@ public class CreatePostFragment extends Fragment {
                                         fm.replace(R.id.constraint,libFragment,"fragment");
                                         fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                                         fm.commit();
+                                        Toast.makeText(getActivity(), "Đăng thành công", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(getActivity(), "Thêm không thành công", Toast.LENGTH_SHORT).show();
                                     }
@@ -197,29 +201,40 @@ public class CreatePostFragment extends Fragment {
         cursor.close();
         return path;
     }
+    @SuppressLint("RestrictedApi")
     public void ChooseStatus(){
-        PopupMenu popupMenu = new PopupMenu(getActivity().getApplicationContext(),editTextFellStatusPost);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_choose_status_post,popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        @SuppressLint("RestrictedApi") MenuBuilder menuBuilder =new MenuBuilder(getActivity());
+        MenuInflater inflater = new MenuInflater(getActivity());
+        inflater.inflate(R.menu.menu_choose_status_post, menuBuilder);
+        @SuppressLint("RestrictedApi") MenuPopupHelper optionsMenu = new MenuPopupHelper(getActivity(), menuBuilder, editTextFellStatusPost);
+        optionsMenu.setForceShowIcon(true);
+        menuBuilder.setCallback(new MenuBuilder.Callback() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+            public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                switch (item.getItemId()) {
                     case R.id.fun:
-                        editTextFellStatusPost.setText(menuItem.getTitle());
-                        break;
+                        editTextFellStatusPost.setText(item.getTitle());
+                        editTextFellStatusPost.setCompoundDrawables(item.getIcon(),null,null,null);
+                        return  true;
                     case R.id.sad:
-                        editTextFellStatusPost.setText(menuItem.getTitle());
-                        break;
+                        editTextFellStatusPost.setText(item.getTitle());
+                        editTextFellStatusPost.setCompoundDrawables(item.getIcon(),null,null,null);
+                        return  true;
                     case R.id.angry:
-                        editTextFellStatusPost.setText(menuItem.getTitle());
-                        break;
+                        editTextFellStatusPost.setText(item.getTitle());
+                        editTextFellStatusPost.setCompoundDrawables(item.getIcon(),null,null,null);
+                        return  true;
                     case R.id.happy:
-                        editTextFellStatusPost.setText(menuItem.getTitle());
-                        break;
+                        editTextFellStatusPost.setText(item.getTitle());
+                        editTextFellStatusPost.setCompoundDrawables(item.getIcon(),null,null,null);
+                        return  true;
+                    default:
+                        return  false;
                 }
-                return false;
             }
+            @Override
+            public void onMenuModeChange(MenuBuilder menu) {}
         });
-        popupMenu.show();
+        optionsMenu.show();
     }
 }

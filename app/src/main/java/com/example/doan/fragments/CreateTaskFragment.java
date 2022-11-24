@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -26,7 +25,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.doan.IpAddressWifi;
 import com.example.doan.MyNotificationPublisher;
 import com.example.doan.R;
 import com.example.doan.Retrofit2.APIUtils;
@@ -52,14 +50,12 @@ public class CreateTaskFragment extends Fragment {
     public TextView textViewDate , textviewTime;
     public EditText editTextName ,editTextDes;
     String timeTonotify;
-    IpAddressWifi ipAddressWifi ;
-    String url;
     Session session;
     String nameLogin ;
     long time = new Date().getTime();
     String tmpStr = String.valueOf(time);
     String last4Str = tmpStr.substring(tmpStr.length()-5);
-    int id = Integer.valueOf(last4Str);
+    int id = Integer.parseInt(last4Str);
     public CreateTaskFragment() {
         // Required empty public constructor
     }
@@ -84,7 +80,7 @@ public class CreateTaskFragment extends Fragment {
         View  view=  inflater.inflate(R.layout.fragment_create_task, container, false);
         AnhXa(view);
         Map<String,String> mapSess = session.getUserDetails();
-        nameLogin = mapSess.get("user_name").toString().trim();
+        nameLogin = mapSess.get("user_name");
         imageButtonDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,7 +168,6 @@ public class CreateTaskFragment extends Fragment {
                     if (response != null ){
                         String result = response.body();
                         if(result.equals("success")){
-                            Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
                             setAlarm(name,date,time);
                             ListFragment listFragment = new ListFragment();
                             TaskApdater taskApdater = listFragment.taskApdater;
@@ -181,6 +176,7 @@ public class CreateTaskFragment extends Fragment {
                             fm.replace(R.id.constraint,listFragment,"fragment");
                             fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                             fm.commit();
+                            Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getActivity(), "Thêm thất bại", Toast.LENGTH_SHORT).show();
                         }
@@ -211,7 +207,6 @@ public class CreateTaskFragment extends Fragment {
         try {
             Date date1 = formatter.parse(dateandtime);
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-            Toast.makeText(getActivity(), "Alarm", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -221,6 +216,5 @@ public class CreateTaskFragment extends Fragment {
         taskApdater.notifyDataSetChanged();
         transaction.replace(R.id.constraint,lfm);
         transaction.commit();
-        //điều hướng từ việc thêm hoạt động nhắc nhở thành hoạt động
     }
 }
