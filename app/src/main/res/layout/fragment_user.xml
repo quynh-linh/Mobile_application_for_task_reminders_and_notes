@@ -36,9 +36,9 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="80dp"
-                    android:layout_height="85dp"
+                    android:id="@+id/imageViewUser"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:src="@android:mipmap/sym_def_app_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

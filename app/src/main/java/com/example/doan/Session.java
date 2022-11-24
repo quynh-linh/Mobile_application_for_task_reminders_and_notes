@@ -29,7 +29,6 @@ public class Session {
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
-
     /**
      * Create login session
      */
@@ -42,10 +41,6 @@ public class Session {
         editor.commit();
     }
 
-    /**
-     * Check login method wil check user login status If false it will redirect
-     * user to login page Else won't do anything
-     */
     public void checkLogin() {
         // Check login status
         if (!this.isLoggedIn()) {

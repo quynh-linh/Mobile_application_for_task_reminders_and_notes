@@ -3,6 +3,7 @@ package com.example.doan;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,16 +21,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.doan.Retrofit2.APIUtils;
+import com.example.doan.Retrofit2.DataCilent;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class registerActivity extends AppCompatActivity {
     EditText editTextNameLogin , editTextPass , editTextEnterPass;
     Button btnRegister;
     TextView textviewNotify;
-    IpAddressWifi ipAddressWifi ;
-    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +45,13 @@ public class registerActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nameLogin = editTextNameLogin.getText().toString().trim();
                 String pass = editTextPass.getText().toString().trim();
-                String enterpass = editTextEnterPass.getText().toString().trim();
-                if (nameLogin.isEmpty() || pass.isEmpty() || enterpass.isEmpty()){
+                String enterPass = editTextEnterPass.getText().toString().trim();
+                if (nameLogin.isEmpty() || pass.isEmpty() || enterPass.isEmpty()){
                     textviewNotify.setTextColor(Color.RED);
                     textviewNotify.setText("Vui lòng nhập đầy đủ thông tin");
                 } else {
-                    int checkPass = Integer.valueOf(pass.length());
-                    Toast.makeText(registerActivity.this, ""+checkPass, Toast.LENGTH_SHORT).show();
-                    if(pass.equals(enterpass) == true){
-                        addUser(url);
+                    if(pass.equals(enterPass) == true){
+                        addUser(nameLogin,pass);
                     } else {
                         textviewNotify.setTextColor(Color.RED);
                         textviewNotify.setText("Mập khẩu không trùng khớp !");
@@ -64,49 +66,30 @@ public class registerActivity extends AppCompatActivity {
         editTextEnterPass = (EditText) findViewById(R.id.editTextTextEnterPassword);
         textviewNotify = (TextView) findViewById(R.id.textviewNotify);
         btnRegister = (Button) findViewById(R.id.buttonRegister);
-        ipAddressWifi = new IpAddressWifi();
-        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/insertUser.php";
-        Log.d("url",url);
     }
-    public  void addUser(String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().equals("success")){
-                            textviewNotify.setTextColor(Color.GREEN);
-                            textviewNotify.setText("Thêm thành công");
-                        }
-                        else if(response.trim().equals("Id already exists")){
-                            textviewNotify.setTextColor(Color.RED);
-                            textviewNotify.setText("Tên đăng nhập đã tồn tại");
-                        }
-                        else {
-                            textviewNotify.setTextColor(Color.RED);
-                            textviewNotify.setText("Thêm không thành công");
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(registerActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                        Log.d("Error Add User",error.toString());
-                    }
-                }
-        ){
-            @Nullable
+    public  void addUser(String nameLogin , String password){
+        DataCilent dataCilent = APIUtils.getData();
+        Call<String> call = dataCilent.addUser(nameLogin,password);
+        call.enqueue(new Callback<String>() {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                String nameLogin = editTextNameLogin.getText().toString().trim();
-                String pass = editTextPass.getText().toString().trim();
-                map.put("nameLogin",nameLogin);
-                map.put("password",pass);
-                return map;
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                String result = response.body();
+                if(result.equals("success")){
+                    startActivity(new Intent(registerActivity.this,LoginActivity.class));
+                }
+                else if(result.equals("exists")){
+                    textviewNotify.setTextColor(Color.RED);
+                    textviewNotify.setText("Tên đăng nhập đã tồn tại");
+                }
+                else if(result.equals("error")){
+                    textviewNotify.setTextColor(Color.RED);
+                    textviewNotify.setText("Thêm không thành công");
+                }
             }
-        };
-        requestQueue.add(stringRequest);
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("Error Add User",t.getMessage());
+            }
+        });
     }
 }

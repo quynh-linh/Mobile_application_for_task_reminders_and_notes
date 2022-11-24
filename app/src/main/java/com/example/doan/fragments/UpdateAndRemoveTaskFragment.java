@@ -34,6 +34,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.doan.IpAddressWifi;
 import com.example.doan.MyNotificationPublisher;
 import com.example.doan.R;
+import com.example.doan.Retrofit2.APIUtils;
+import com.example.doan.Retrofit2.DataCilent;
 import com.example.doan.Session;
 import com.example.doan.Adapter.TaskApdater;
 
@@ -45,19 +47,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class UpdateAndRemoveTaskFragment extends Fragment {
     public ImageButton imageButtonDate, imageButtonTime;
     public Button btnUpdateTask , btnRemoveTask;
     public TextView textViewDate , textviewTime;
     public EditText editTextName ,editTextDes;
     String timeTonotify;
-    IpAddressWifi ipAddressWifi ;
-    String url , urlDele;
     Session session;
     int id;
-    public UpdateAndRemoveTaskFragment() {
-        // Required empty public constructor
-    }
     public void AnhXa(View view){
         imageButtonDate = (ImageButton) view.findViewById(R.id.imageButtonDate);
         imageButtonTime = (ImageButton) view.findViewById(R.id.imageButtonTime);
@@ -68,10 +68,6 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
         textviewTime = (TextView) view.findViewById(R.id.textviewTime);
         textViewDate = (TextView) view.findViewById(R.id.textViewContentDate);
         session = new Session(getActivity());
-        ipAddressWifi = new IpAddressWifi();
-        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/updateTask.php";
-        urlDele = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/deleteTask.php";
-        Log.d("url",url);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,21 +104,13 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
                 String date1 = textViewDate.getText().toString().trim();
                 String time1 = textviewTime.getText().toString().trim();
                 String content1 = editTextDes.getText().toString().trim();
-                UpdateTask(id,name,date1,time1,content1,user_id,url);
-                processinsert(name,date1,time1);
+                UpdateTask(id,name,date1,time1,content1,user_id);
             }
         });
         btnRemoveTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeTask(urlDele,id);
-                ListFragment list = new ListFragment();
-                FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-                fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
-                TaskApdater taskApdater = ListFragment.taskApdater;
-                taskApdater.notifyDataSetChanged();
-                fm.replace(R.id.constraint,list);
-                fm.commit();
+                removeTask(id);
             }
         });
         return view;
@@ -180,11 +168,6 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
         }, year, month, day);
         datePickerDialog.show();
     }
-    private void processinsert(String title, String date, String time) {
-        setAlarm(title, date, time);
-        //calls the set alarm method to set alarm
-        Toast.makeText(getActivity(), "Sửa thành công", Toast.LENGTH_SHORT).show();
-    }
 
     private void setAlarm(String text, String date, String time) {
         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -203,7 +186,6 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
             Date date1 = formatter.parse(dateandtime);
             Log.d("Date",date1.toString());
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-            Toast.makeText(getActivity(), "Alarm", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -216,67 +198,65 @@ public class UpdateAndRemoveTaskFragment extends Fragment {
         //điều hướng từ việc thêm hoạt động nhắc nhở thành hoạt động
     }
 
-    private void UpdateTask(int id , String title , String date , String time , String content , String user_id , String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.trim().equals("success")){
-                    //Toast.makeText(getActivity(), "Sửa thành công", Toast.LENGTH_SHORT).show();
-                    Log.d("Success",response.toString());
-                } else {
-                    //Toast.makeText(getActivity(), "Sửa thất bại", Toast.LENGTH_SHORT).show();
-                    Log.d("Error success",response.toString());
+    private void UpdateTask(int id , String title , String date , String time , String content , String user_id){
+        DataCilent dataCilent = APIUtils.getData();
+        if (!(title.isEmpty() || date.isEmpty() || time.isEmpty() || content.isEmpty())){
+            Call<String> call = dataCilent.updateTask(String.valueOf(id).trim(),title,content,time,date,user_id);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                    if (response != null ){
+                        String result = response.body();
+                        if(result.equals("success")){
+                            Toast.makeText(getActivity(), "Cập nhập thành công", Toast.LENGTH_SHORT).show();
+                            setAlarm(title,date,time);
+                            ListFragment listFragment = new ListFragment();
+                            TaskApdater taskApdater = listFragment.taskApdater;
+                            taskApdater.notifyDataSetChanged();
+                            FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                            fm.replace(R.id.constraint,listFragment,"fragment");
+                            fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                            fm.commit();
+                        } else {
+                            Toast.makeText(getActivity(), "Cập nhập thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error Insert",error.toString().trim());
-            }
-        }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                map.put("id",String.valueOf(id).trim());
-                map.put("title",title.trim());
-                map.put("content",content.trim());
-                map.put("time",time.trim());
-                map.put("date",date.trim());
-                map.put("user_id",user_id.trim());
-                return map;
-            }
-        };
-        requestQueue.add(stringRequest);
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("Error", t.getMessage());
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        }
     }
-    private void removeTask(String url,int id){
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.trim().equals("Delete Success")){
-                    //Toast.makeText(getActivity(), "Sửa thành công", Toast.LENGTH_SHORT).show();
-                    Log.d("Delete Success",response.toString());
-                } else {
-                    //Toast.makeText(getActivity(), "Sửa thất bại", Toast.LENGTH_SHORT).show();
-                    Log.d("Error delete",response.toString());
+    private void removeTask(int id){
+        DataCilent dataCilent = APIUtils.getData();
+            Call<String> call = dataCilent.removeTask(id);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                    if (response != null ){
+                        String result = response.body();
+                        if(result.equals("success")){
+                            Toast.makeText(getActivity(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            ListFragment listFragment = new ListFragment();
+                            TaskApdater taskApdater = listFragment.taskApdater;
+                            taskApdater.notifyDataSetChanged();
+                            FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                            fm.replace(R.id.constraint,listFragment,"fragment");
+                            fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                            fm.commit();
+                        } else {
+                            Toast.makeText(getActivity(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error delete",error.toString().trim());
-            }
-        }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                map.put("id",String.valueOf(id).trim());
-                return map;
-            }
-        };
-        requestQueue.add(stringRequest);
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("Error", t.getMessage());
+                }
+            });
     }
 }

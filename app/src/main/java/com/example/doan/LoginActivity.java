@@ -1,14 +1,10 @@
 package com.example.doan;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
-import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,28 +13,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.doan.Retrofit2.APIUtils;
+import com.example.doan.Retrofit2.DataCilent;
 
-import org.json.JSONArray;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class LoginActivity extends AppCompatActivity {
     Button btnlogin , btnsignup;
     EditText editTextNameLogin , editTextPass;
     TextView textViewNotify;
     Session session;
-    IpAddressWifi ipAddressWifi ;
-    String url;
     public void AnhXa(){
         btnlogin = (Button) findViewById(R.id.buttonLogin);
         btnsignup = (Button) findViewById(R.id.buttonSignup);
@@ -46,9 +31,6 @@ public class LoginActivity extends AppCompatActivity {
         editTextPass = (EditText) findViewById(R.id.editTextPass);
         textViewNotify = (TextView) findViewById(R.id.textViewNotify);
         session = new Session(LoginActivity.this);
-        ipAddressWifi = new IpAddressWifi();
-        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/loginUser.php";
-        Log.d("url",url);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +38,15 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
         AnhXa();
-
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String nameLogin = editTextNameLogin.getText().toString();
                 String pass = editTextPass.getText().toString();
                 if (!(nameLogin.isEmpty() || pass.isEmpty())){
-                    loginUser(url);
+                    loginUser(nameLogin,pass);
+                    session.createLoginSession(nameLogin);
+                    session.checkLogin();
                 } else {
                     textViewNotify.setText("Vui lòng nhập đầy đủ thông tin !");
                     textViewNotify.setTextColor(Color.RED);
@@ -80,37 +63,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void loginUser(String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+    public void loginUser(String nameLogin,String password){
+        DataCilent dataCilent = APIUtils.getData();
+        Call<String> call = dataCilent.loginUser(nameLogin,password);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(String response) {
-                if(response.trim().equals("Login success")){
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                String result = response.body();
+                if (result.trim().equals("success")){
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    session.createLoginSession(editTextNameLogin.getText().toString());
-                    session.checkLogin();
                 } else {
                     textViewNotify.setText("Đăng nhập thất bại");
                     textViewNotify.setTextColor(Color.RED);
                 }
             }
-        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                Log.d("Error Login User",error.toString());
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("AAA",t.getMessage());
             }
-        }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                map.put("nameLogin",editTextNameLogin.getText().toString());
-                map.put("password",editTextPass.getText().toString());
-                return map;
-            }
-        };
-        requestQueue.add(stringRequest);
+        });
     }
 }

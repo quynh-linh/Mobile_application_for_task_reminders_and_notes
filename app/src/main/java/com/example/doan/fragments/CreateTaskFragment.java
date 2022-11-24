@@ -26,16 +26,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.doan.IpAddressWifi;
 import com.example.doan.MyNotificationPublisher;
 import com.example.doan.R;
+import com.example.doan.Retrofit2.APIUtils;
+import com.example.doan.Retrofit2.DataCilent;
 import com.example.doan.Session;
 import com.example.doan.Adapter.TaskApdater;
 
@@ -44,8 +39,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CreateTaskFragment extends Fragment {
@@ -79,9 +77,6 @@ public class CreateTaskFragment extends Fragment {
         editTextDes = (EditText) view.findViewById(R.id.edittextDes);
         //
         session = new Session(getActivity());
-        ipAddressWifi = new IpAddressWifi();
-        url = "http://"+ ipAddressWifi.getIp()+ipAddressWifi.getPortLocalHost()+"/"+ipAddressWifi.getFileNameDB()+"/insertTask.php";
-        Log.d("url",url);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,22 +100,11 @@ public class CreateTaskFragment extends Fragment {
         btnCreateTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = editTextName.getText().toString().trim();
-                String date = textViewDate.getText().toString().trim();
-                String time =textviewTime.getText().toString().trim();
-                processinsert(title,date,time);
-                ListFragment fragment = new ListFragment();
-                FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-                TaskApdater taskApdater = ListFragment.taskApdater;
-                taskApdater.notifyDataSetChanged();
-                fm.replace(R.id.constraint,fragment,"fragment");
-                fm.commit();
+                insertTask();
             }
         });
         return view;
     }
-
-
     public void selectTime() {
         //this method performs the time picker task
         Calendar calendar = Calendar.getInstance();
@@ -174,47 +158,43 @@ public class CreateTaskFragment extends Fragment {
         }, year, month, day);
         datePickerDialog.show();
     }
-    private void insertTask(String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.trim().equals("success")){
-                    Log.d("Success",response.toString());
-                } else {
-                    Log.d("Error success",response.toString());
+    private void insertTask(){
+        DataCilent dataCilent = APIUtils.getData();
+        String name =  editTextName.getText().toString().trim();
+        String des = editTextDes.getText().toString().trim();
+        String time = textviewTime.getText().toString().trim();
+        String date =  textViewDate.getText().toString().trim();
+        if (!(name.isEmpty() || des.isEmpty() || time.isEmpty() || date.isEmpty())){
+            Call<String> call = dataCilent.insertTask(String.valueOf(id).trim(),name,des,time,date,nameLogin);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response != null ){
+                        String result = response.body();
+                        if(result.equals("success")){
+                            Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+                            setAlarm(name,date,time);
+                            ListFragment listFragment = new ListFragment();
+                            TaskApdater taskApdater = listFragment.taskApdater;
+                            taskApdater.notifyDataSetChanged();
+                            FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                            fm.replace(R.id.constraint,listFragment,"fragment");
+                            fm.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+                            fm.commit();
+                        } else {
+                            Toast.makeText(getActivity(), "Thêm thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error Insert",error.toString().trim());
-            }
-        }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                map.put("id",String.valueOf(id).trim());
-                map.put("title",editTextName.getText().toString().trim());
-                map.put("content",editTextDes.getText().toString().trim());
-                map.put("time",textviewTime.getText().toString().trim());
-                map.put("date",textViewDate.getText().toString().trim());
-                map.put("user_id",nameLogin);
-                return map;
-            }
-        };
-        requestQueue.add(stringRequest);
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("Error", t.getMessage());
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        }
     }
-    private void processinsert(String title, String date, String time) {
-        //inserts the title,date,time into sql lite database
-        setAlarm(title, date, time);
-        //add mysql
-        insertTask(url);
-        //calls the set alarm method to set alarm
-        Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
-    }
-
     private void setAlarm(String text, String date, String time) {
         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //chỉ định đối tượng quản lý báo động để đặt báo thức

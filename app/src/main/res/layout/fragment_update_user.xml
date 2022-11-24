@@ -13,6 +13,7 @@
         android:layout_height="43dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="28dp"
+        android:drawableRight="@drawable/ic_redeem"
         android:ems="10"
         android:fontFamily="@font/font"
         android:inputType="textPersonName"
