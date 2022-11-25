@@ -20,7 +20,7 @@
             android:layout_height="fill_parent">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textViewNameUser"
                 android:layout_width="260dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="16dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.015"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewNameUser" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName"
@@ -70,7 +70,8 @@
                 android:drawableLeft="@drawable/magnifying_glass_icon"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Search"
+                android:hint="Tìm kiếm"
+                android:textColorHint="#B3B3B3"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.444"
@@ -212,7 +213,7 @@
                     app:layout_constraintVertical_bias="1.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
+            <ListView
                 android:layout_width="379dp"
                 android:layout_height="183dp"
                 android:layout_marginStart="16dp"
@@ -222,9 +223,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13"></LinearLayout>
-
-
+                app:layout_constraintTop_toBottomOf="@+id/textView13"></ListView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
