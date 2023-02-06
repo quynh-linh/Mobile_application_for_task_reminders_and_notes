@@ -36,7 +36,7 @@ User requirements:
 ```
 ## Steps to run the application:
 1. Clone from github to folder
-<a href="https://github.com/Quynh-Linh-IT/Mobile_application_for_task_reminders_and_notes.git">2. Copy PHP folder from github and add to htdocs folder in xampp</a>
+2. Copy <a href="https://github.com/Quynh-Linh-IT/Mobile_application_for_task_reminders_and_notes.git"> PHP folder</a> from github and add to htdocs folder in xampp
 3. Add mobile_db.sql in Database folder PHP to Mysql
 4. Then launch the app
 ## [Project Demo Link](https://www.youtube.com/watch?v=sioYzsuVgwQ)
